@@ -1,0 +1,33 @@
+{
+  "project": {
+    "projectSettingsVersion": "1.0",
+    "creationData": {
+      "type": "Demo",
+      "src": "http://edge-intel.s3.amazonaws.com/samples/production/sample-flood-puzzle/sample.zip",
+      "projectGuid": "c36b3979-befd-4d10-b2a9-7f02e23d9e38",
+      "lastModifiedDate": 1397978171007,
+      "creationDate": 1397978170951
+    },
+    "sourceDirectory": "",
+    "startFile": "index.html",
+    "projectFiles": {},
+    "projectDirectories": {},
+    "libraries": [
+      {
+        "name": "Cordova",
+        "version": "2.9.0",
+        "data": {
+          "default": true
+        }
+      },
+      {
+        "name": "intelXDK",
+        "version": "4.0.0",
+        "data": {
+          "default": true
+        }
+      }
+    ],
+    "serviceMethods": []
+  }
+}

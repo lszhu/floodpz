@@ -1,0 +1,2 @@
+Flood is a puzzle game in which the object is to flood the entire field with any one color.  The flood starts with the top left corner and any adjacent squares that are the same color.  When another color is touched (or clicked) the top left flood changes to the new color, and any adjacent squares
+become part of the flood.  The number at the bottom of the screen shows the number of steps so far.

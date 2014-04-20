@@ -1,0 +1,52 @@
+<!doctype html>
+
+<html>
+
+<meta name="Copyright" content="&copy; 2012-2013, Intel Corporation. All rights reserved." />
+<!--
+* Copyright (c) 2012-2013, Intel Corporation. All rights reserved.
+* File revision: 08 October 2013
+* Please see http://software.intel.com/html5/license/samples 
+* and the included README.md file for license terms and conditions.
+-->
+<title>Flood Puzzle</title>
+<meta name="keywords" content="HTML,CSS,JavaScript">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/javascript" src="js/puzzle-table.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<head>
+    <script src="intelxdk.js"></script>
+    <script src='cordova.js'></script>
+    <script src='xhr.js'></script>
+    <script type="text/javascript">
+        /* This code is used to run as soon as Intel activates */
+        var onDeviceReady = function() {
+            //hide splash screen
+            intel.xdk.device.hideSplashScreen();
+        };
+        document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);
+
+        /* This code prevents users from dragging the page */
+        var preventDefaultScroll = function(event) {
+            event.preventDefault();
+            window.scroll(0, 0);
+            return false;
+        };
+        document.addEventListener('touchmove', preventDefaultScroll, false);
+    </script>
+</head>
+
+<body onload="makeCells()">
+    <table id=field class="slowchange">
+    </table>
+    <h2>
+        <span id=counter>0</span>
+        <span class=button onclick="resetGame()">New Game</span>
+    </h2>
+
+</body>
+
+</html>
+

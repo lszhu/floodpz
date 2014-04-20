@@ -1,0 +1,16 @@
+{
+	"reponame":"sample-flood-puzzle",
+	"title":"Flood Puzzle Game",
+	"tooltip":"Manipulating style through built-in DOM APIs",
+	"description":"A flood game, similar to Color Flood or Flood-it, where the goal is to fill the field with a single color using the minimum number of color transitions",
+	"highlights":["Game"],
+	"apppreview":"true",
+	"appname":"demo.floodpuzzle",
+	"articleUrl":"http://software.intel.com/en-us/articles/flood-puzzle-game",
+	"keywords":["Game"],
+	"iconUrl":"https://github.com/gomobile/sample-flood-puzzle/blob/master/icon.png",
+	"screenshotUrl":"https://github.com/gomobile/sample-flood-puzzle/blob/master/screenshot.png",
+	"visible" : "true",
+	"zipUrl":"",
+	"relname":"4.0.0"
+}
