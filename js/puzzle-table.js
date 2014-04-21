@@ -2,15 +2,15 @@
 
 var colors = ["red", "blue", "green", "yellow", "darkred", "violet"];
 var background = '';
-var data = [];
+var data = [];     //save the info of each cell. include dom, color, x, y
 var donelist = [];
 
-function addNeighbor(k)
-{
+// add neighbor to
+function addNeighbor(k) {
     if (k.checked) {
         return;
     }
-    for (var i=0; i<donelist.length; i++) {
+    for (var i = 0; i < donelist.length; i++) {
         k.done = true;
         if (donelist[i] == k) {
             return;
@@ -19,8 +19,7 @@ function addNeighbor(k)
     donelist.push(k);
 }
 
-function checkColor(k)
-{
+function checkColor(k) {
     if (k.done || k.dom.color == background) {
         k.done = true;
         k.dom.color = 'transparent';
@@ -29,31 +28,29 @@ function checkColor(k)
     }
 }
 
-function addNeighbors(t)
-{
+function addNeighbors(t) {
     if (t.x > 0) {
-        checkColor(data[t.x-1][t.y]);
+        checkColor(data[t.x - 1][t.y]);
     }
-    if (t.x < data.length-1) {
-        checkColor(data[t.x+1][t.y]);
+    if (t.x < data.length - 1) {
+        checkColor(data[t.x + 1][t.y]);
     }
     if (t.y > 0) {
-        checkColor(data[t.x][t.y-1]);
+        checkColor(data[t.x][t.y - 1]);
     }
-    if (t.y < data[t.x].length-1) {
-        checkColor(data[t.x][t.y+1]);
+    if (t.y < data[t.x].length - 1) {
+        checkColor(data[t.x][t.y + 1]);
     }
     t.checked = true;
 }
 
 
-function doColor(color)
-{
+function doColor(color) {
     var f = document.getElementById('field');
     background = color;
-    donelist=[];
-    for (var i=0; i<data.length; i++) {
-        for (var j=0; j<data[i].length; j++) {
+    donelist = [];
+    for (var i = 0; i < data.length; i++) {
+        for (var j = 0; j < data[i].length; j++) {
             data[i][j].checked = false;
             if (data[i][j].done) {
                 donelist.push(data[i][j]);
@@ -70,15 +67,16 @@ function doColor(color)
 }
 
 
-function colorCells(data)
-{
-    for (var i=0; i<data.length; i++) {
+function colorCells(data) {
+    for (var i = 0; i < data.length; i++) {
         var drow = data[i];
-        if (i === 0){
+        if (i === 0) {
+            //the game start from top left.
             drow[0].dom.innerHTML = "start";
         }
-        for (var j=0; j<drow.length; j++) {
-            var c = colors[parseInt(Math.random()*colors.length)];
+        for (var j = 0; j < drow.length; j++) {
+            //create random color and save in each array items' dom attribute.
+            var c = colors[parseInt(Math.random() * colors.length)];
             drow[j].dom.style.backgroundColor = c;
             drow[j].dom.color = c;
             drow[j].done = false;
@@ -93,49 +91,57 @@ function colorCells(data)
     doColor(background);
 }
 
-function resetCounter()
-{
+// reset the counter to 0.
+function resetCounter() {
     var counter = document.getElementById('counter');
     counter.innerHTML = "0";
 }
 
-function incCounter()
-{
+// increase counter by 1.
+function incCounter() {
     var counter = document.getElementById('counter');
     var cur = parseInt(counter.innerHTML);
-    counter.innerHTML = String(cur+1);
+    counter.innerHTML = String(cur + 1);
 }
 
-function clickCell()
-{
+// event handler when click the cells.
+function clickCell() {
     if (this.color != background && this.color != 'transparent') {
         incCounter();
         doColor(this.color);
     }
 }
-/*Modify to recieve the device width and create the appropriate puzzle*/
+
+/*Modify to receive the device width and create the appropriate puzzle*/
 //function makeCells(x, y)
-function makeCells()
-{
+//x cols, y rows table
+function makeCells() {
     var x = window.innerWidth / 60;
     var y = x;
 
     //For setting the row size for desktop browsers or landscape orientation
-    if (x >= 14){
-       y=13;
+    if (x >= 14) {
+        y = 13;
     }
 
     var f = document.getElementById('field');
-    data = [];
-    for (var i=0; i<y; i++) {
-        var row = document.createElement('tr');
-        var drow = [];
-        for (var j=0; j<x; j++) {
-            var square = document.createElement('td');
+    data = [];      //save the info of each cell.
+    var row, drow, square;
+    for (var i = 0; i < y; i++) {
+        row = document.createElement('tr');
+        drow = [];
+        for (var j = 0; j < x; j++) {
+            square = document.createElement('td');
+            // maybe we can change the aspect of the square/cell here.
             square.setAttribute('class', 'cell slowchange');
             square.onclick = clickCell;
             row.appendChild(square);
-            drow[j] = { "dom": square, "color": '', "x": i, "y": j};
+            drow[j] = {
+                "dom": square,
+                "color": '',
+                "x": i,
+                "y": j
+            };
         }
         data[i] = drow;
         f.appendChild(row);
@@ -143,13 +149,12 @@ function makeCells()
     colorCells(data);
 }
 
-function clickColor()
-{
+// set the color to background color when we click the cell.
+function clickColor() {
     doColor(this.style.backgroundColor);
 }
 
-function resetGame()
-{
+function resetGame() {
     colorCells(data);
     resetCounter();
 }
