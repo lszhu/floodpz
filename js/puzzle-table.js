@@ -8,6 +8,8 @@ var icons = ['sa', 'sg', 'sr', 'ta', 'tg', 'tr'];
 var curIcon = '';
 //save the info of each cell. include dom(html dom of the cell), x, y
 var data = [];
+//backup current cell info
+var curGame = [];
 //act as a stack to save the flooded cell and neighbors being flooded.
 var donelist = [];
 
@@ -75,17 +77,37 @@ function changeIcon() {
     }
 }
 
+//backup current game to a curGame
+function bkGame() {
+    var row = [];
+    for (var i = 0; i < data.length; i++) {
+        for (var j = 0; j < data[i].length; j++) {
+            row[j] = data[i][j].dom.firstChild.src;
+        }
+        curGame.push(row);
+    }
+}
+
 //initiate the cells' icon, prepare the start cell on left top.
 //parameter data store all the cells' info, each item stores a row of table.
-function updateCells(data) {
+function updateCells(game) {
     var drow;
     for (var i = 0; i < data.length; i++) {
         drow = data[i];
         for (var j = 0; j < drow.length; j++) {
-            //create random icon and set each array items' dom attribute.
-            var c = icons[parseInt(Math.random() * icons.length)];
             var img = document.createElement('img');
-            img.src = 'images/' + c + '.ico';
+            if (game) {
+                //restore data to restart a game
+                img.src = game[i][j];
+            } else {
+                //create random icon and set each array items' dom attribute.
+                var c = icons[parseInt(Math.random() * icons.length)];
+                img.src = 'images/' + c + '.ico';
+                if (!curGame[i]) {
+                    curGame = [];
+                }
+                curGame[i][j] = img.src;
+            }
             img.style.width = CELLWIDTH + 'px';
             img.style.height = CELLWIDTH + 'px';
             drow[j].dom.innerHTML = '';
@@ -104,15 +126,16 @@ function updateCells(data) {
 /*Modify to receive the device width and create the appropriate puzzle*/
 //function makeCells(x, y)
 //x cols, y rows table
-function makeCells() {
+function makeCells(game) {
     var x = Math.floor(window.innerWidth / CELLWIDTH);
     var y = x;
 
-    //For setting the row size for desktop browsers or landscape orientation
-    if (x >= 10) {
-        y = 10;
+    //initiate curGame as a 2 dimension array
+    if (!game) {
+        for (var k = 0; k < x; k++) {
+            curGame[k] = [];
+        }
     }
-
     var f = document.getElementById('field');
     f.innerHTML = '';
     data = [];      //save the info of each cell.
@@ -138,7 +161,7 @@ function makeCells() {
         data[i] = drow;
         f.appendChild(row);
     }
-    updateCells(data);
+    updateCells(game);
 }
 
 // reset the counter to 0.
@@ -166,7 +189,13 @@ function clickCell() {
 
 // start a new game
 function resetGame() {
-    makeCells(data);
+    makeCells();
+    resetCounter();
+}
+
+// restart current game
+function restartGame() {
+    makeCells(curGame);
     resetCounter();
 }
 
@@ -176,6 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
     //set the table align center
     d.style.padding = Math.floor(window.innerWidth % CELLWIDTH / 2) + 'px';
     makeCells();
-    var start = document.getElementsByClassName('button')[0];
+    var start = document.getElementById('newGame');
     start.addEventListener('click', resetGame);
+    var restart = document.getElementById('reset');
+    restart.addEventListener('click', restartGame);
 });
