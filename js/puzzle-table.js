@@ -4,6 +4,10 @@
 var CELLWIDTH = 60;
 //candidate colors
 var colors = ["red", "blue", "green", "yellow", "darkred", "violet"];
+//candidate icons
+var icons = ['sa', 'sg', 'sr', 'ta', 'tg', 'tr'];
+//current icon in flooded cell
+var curIcon = '';
 //save the background color.
 var background = '';
 //save the info of each cell. include dom(html dom of the cell), color, x, y
@@ -56,7 +60,7 @@ function addNeighbors(t) {
     t.checked = true;
 }
 
-//called by colorCells() and clickCell() to render the cell.
+//called by updateCells() and clickCell() to render the cell.
 function doColor(color) {
     var f = document.getElementById('field');
     background = color;
@@ -76,24 +80,32 @@ function doColor(color) {
     //find the cell's neighbors with the color and set color.
     while (donelist.length > 0) {
         var t = donelist.pop();
+        t.dom.firstChild.src = curIcon;
         addNeighbors(t);
     }
 }
 
 //initiate the cells' color, prepare the start cell on left top.
 //parameter data store all the cells' info, each item stores a row of table.
-function colorCells(data) {
+function updateCells(data) {
     var drow;
     for (var i = 0; i < data.length; i++) {
         drow = data[i];
         if (i === 0) {
             //the game start from top left.
-            drow[0].dom.innerHTML = "start";
+            //drow[0].dom.innerHTML = "start";
         }
         for (var j = 0; j < drow.length; j++) {
             //create random color and set each array items' dom attribute.
-            var c = colors[parseInt(Math.random() * colors.length)];
-            drow[j].dom.style.backgroundColor = c;
+            //var c = colors[parseInt(Math.random() * colors.length)];
+            //drow[j].dom.style.backgroundColor = c;
+            var c = icons[parseInt(Math.random() * icons.length)];
+            var img = document.createElement('img');
+            img.src = 'images/' + c + '.ico';
+            img.style.width = CELLWIDTH + 'px';
+            img.style.height = CELLWIDTH + 'px';
+            drow[j].dom.innerHTML = '';
+            drow[j].dom.appendChild(img);
             drow[j].dom.color = c;
             //indicate the cell hasn't been played with (not flooded)
             drow[j].done = false;
@@ -107,6 +119,7 @@ function colorCells(data) {
     data[0][0].done = true;
     data[0][0].dom.style.backgroundColor = 'transparent';
     data[0][0].dom.color = 'transparent';
+    curIcon = data[0][0].dom.firstChild.src;
     doColor(background);
 }
 
@@ -132,6 +145,9 @@ function makeCells() {
             square = document.createElement('td');
             // maybe we can change the aspect of the square/cell here.
             square.setAttribute('class', 'cell slowchange');
+            square.style.width = CELLWIDTH + 'px';
+            square.style.height = CELLWIDTH + 'px';
+            square.style.minWidth = CELLWIDTH + 'px';
             square.onclick = clickCell;
             row.appendChild(square);
             drow[j] = {
@@ -144,7 +160,8 @@ function makeCells() {
         data[i] = drow;
         f.appendChild(row);
     }
-    colorCells(data);
+
+    updateCells(data);
 }
 
 // reset the counter to 0.
@@ -164,6 +181,7 @@ function incCounter() {
 function clickCell() {
     if (this.color != background && this.color != 'transparent') {
         incCounter();
+        curIcon = this.firstChild.src;
         doColor(this.color);
     }
 }
@@ -174,7 +192,7 @@ function clickColor() {
 }
 
 function resetGame() {
-    colorCells(data);
+    updateCells(data);
     resetCounter();
 }
 
