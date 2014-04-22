@@ -1,11 +1,14 @@
 /*jslint browser:true, devel:true, white:true, vars:true, eqeq:true */
 
+//define the table cell width
+var CELLWIDTH = 60;
+//candidate colors
 var colors = ["red", "blue", "green", "yellow", "darkred", "violet"];
 //save the background color.
 var background = '';
 //save the info of each cell. include dom(html dom of the cell), color, x, y
 var data = [];
-//act as a stack to save the neighbors being colored.
+//act as a stack to save the flooded cell and neighbors being flooded.
 var donelist = [];
 
 // add neighbor to
@@ -111,12 +114,12 @@ function colorCells(data) {
 //function makeCells(x, y)
 //x cols, y rows table
 function makeCells() {
-    var x = window.innerWidth / 60;
+    var x = Math.floor(window.innerWidth / CELLWIDTH);
     var y = x;
 
     //For setting the row size for desktop browsers or landscape orientation
-    if (x >= 14) {
-        y = 13;
+    if (x >= 10) {
+        y = 10;
     }
 
     var f = document.getElementById('field');
@@ -174,3 +177,13 @@ function resetGame() {
     colorCells(data);
     resetCounter();
 }
+
+//initiate game GUI
+document.addEventListener('DOMContentLoaded', function() {
+    var d = document.getElementsByTagName('div')[0];
+    //set the table align center
+    d.style.padding = Math.floor(window.innerWidth % CELLWIDTH / 2) + 'px';
+    makeCells();
+    var start = document.getElementsByClassName('button')[0];
+    start.addEventListener('click', resetGame);
+});
